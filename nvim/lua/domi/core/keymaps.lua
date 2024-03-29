@@ -12,10 +12,28 @@ keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
 
--- delete single character without copying into register
+-- delete character without copying into register
 keymap.set("n", "x", '"_x')
 keymap.set("n", "D", '"_D')
 keymap.set("n", "dd", '"_dd')
+keymap.set("n", "dw", '"_dw')
+keymap.set("n", "d$", '"_d$')
+keymap.set("n", "d^", '"_d^')
+keymap.set("n", "db", '"_db')
+keymap.set("n", "diw", '"_diw')
+keymap.set("n", "daw", '"_daw')
+keymap.set("n", 'di"', '"_di"')
+keymap.set("n", 'da"', '"_da"')
+keymap.set("n", "di'", "\"_di'")
+keymap.set("n", "da'", "\"_da'")
+keymap.set("n", "di(", '"_di(')
+keymap.set("n", "da(", '"_da(')
+keymap.set("n", "di)", '"_di)')
+keymap.set("n", "da)", '"_da)')
+keymap.set("n", "di{", '"_di{')
+keymap.set("n", "da{", '"_da{')
+keymap.set("n", "di}", '"_di}')
+keymap.set("n", "da}", '"_da}')
 
 -- increment/decrement numbers
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
