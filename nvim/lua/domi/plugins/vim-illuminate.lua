@@ -60,10 +60,18 @@ return {
 			case_insensitive_regex = false,
 		})
 
-		-- Use the 'CursorLine' highlight group color as the background for the matching words and disable underline
-		local cursorLineBg = vim.fn.synIDattr(vim.fn.hlID("CursorLine"), "bg#", "gui")
-		vim.api.nvim_command("hi IlluminatedWordText guibg=" .. cursorLineBg .. " gui=NONE cterm=NONE")
-		vim.api.nvim_command("hi IlluminatedWordRead guibg=" .. cursorLineBg .. " gui=NONE cterm=NONE")
-		vim.api.nvim_command("hi IlluminatedWordWrite guibg=" .. cursorLineBg .. " gui=NONE cterm=NONE")
+		-- Highlight matching words
+		vim.api.nvim_command("hi IlluminatedWordText gui=NONE cterm=NONE")
+		vim.api.nvim_command("hi IlluminatedWordRead gui=NONE cterm=NONE")
+		vim.api.nvim_command("hi IlluminatedWordWrite gui=NONE cterm=NONE")
+
+		-- -- Use the 'CursorLine' highlight group color as the background for the matching words and disable underline
+		-- local cursorLineBg = vim.fn.synIDattr(vim.fn.hlID("CursorLine"), "bg#", "gui")
+		--
+		-- -- The following settings are used if you want to underline the matching word
+		-- vim.api.nvim_command("hi IlluminatedWordText guibg=" .. cursorLineBg .. " gui=NONE cterm=NONE")
+		-- vim.api.nvim_command("hi IlluminatedWordRead guibg=" .. cursorLineBg .. " gui=NONE cterm=NONE")
+		-- vim.api.nvim_command("hi IlluminatedWordWrite guibg=" .. cursorLineBg .. " gui=NONE cterm=NONE")
+
 	end,
 }
