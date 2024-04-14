@@ -34,6 +34,7 @@ keymap.set("n", "di{", '"_di{')
 keymap.set("n", "da{", '"_da{')
 keymap.set("n", "di}", '"_di}')
 keymap.set("n", "da}", '"_da}')
+keymap.set("n", "d%}", '"_d%}')
 
 -- increment/decrement numbers
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
