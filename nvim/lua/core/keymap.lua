@@ -83,15 +83,75 @@ keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file ex
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ LSP                                                      │
 -- ╰──────────────────────────────────────────────────────────╯
--- restart lsp server
-keymap.set("n", "<leader>rs", ":LspRestart<CR>")
+-- lsp configs are defined in lua/plugins/lsp/lspconfig.lua
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Treesitter                                               │
 -- ╰──────────────────────────────────────────────────────────╯
+-- Telescope settings are defined in lua/plugins/telescope.lua
+-- and lua/plugins/telescope-file-browser.lua
+
+-- ╭──────────────────────────────────────────────────────────╮
+-- │ Debugger                                                 │
+-- ╰──────────────────────────────────────────────────────────╯
+-- Toggle Breakpoint
+keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>")
+
+-- Start debugging
+keymap.set("n", "<leader>dr", "<cmd> lua require('dap').continue()<CR>")
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Git                                                      │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Open LazyGit
 keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open lazy git" })
+
+-- ╭──────────────────────────────────────────────────────────╮
+-- │ Run Code                                                 │
+-- ╰──────────────────────────────────────────────────────────╯
+-- Every code execute shorcut works like this:
+-- <leader> + <leader> + [r]un + [<filetype shorcut>]
+--
+-- List of filetype shorcuts:
+-- Bash   -> b
+-- C      -> c
+-- C++    -> +
+-- Python -> p
+
+-- Bash
+vim.api.nvim_create_user_command("RunBash", function()
+	local file = vim.fn.expand("%:p")
+	-- vim.cmd("vert term bash " .. file)
+	vim.cmd("split | term bash " .. file)
+end, {})
+
+vim.keymap.set("n", "<leader><leader>rb", ":w<cr><cmd>RunBash<cr>", { desc = "Run Bash", noremap = true })
+
+-- C
+vim.api.nvim_create_user_command("RunC", function()
+	local file = vim.fn.expand("%:t")
+	local output = vim.fn.expand("%:t:r") .. ".out"
+	-- vim.cmd("vert term gcc " .. file .. " -o " .. output .. " && ./" .. output) -- Split vertically
+	vim.cmd("split | term gcc " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
+end, {})
+
+keymap.set("n", "<leader><leader>rc", ":w<cr><cmd>RunC<cr>", { desc = "Run C" })
+
+-- C++
+vim.api.nvim_create_user_command("RunCpp", function()
+	local file = vim.fn.expand("%:t")
+	local output = vim.fn.expand("%:t:r") .. ".out"
+	-- vim.cmd("vert term g++ " .. file .. " -o " .. output .. " && ./" .. output) -- Split vertically
+	vim.cmd("split | term g++ " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
+end, {})
+
+keymap.set("n", "<leader><leader>r+", ":w<cr><cmd>RunCpp<cr>", { desc = "Run C++" })
+
+-- Python
+vim.api.nvim_create_user_command("RunPython", function()
+	local file = vim.fn.expand("%:p")
+	-- vim.cmd("vert term python3 " .. file)
+	vim.cmd("split | term python3 " .. file)
+end, {})
+
+vim.keymap.set("n", "<leader><leader>rp", ":w<cr><cmd>RunPython<cr>", { desc = "Run Python", noremap = true })

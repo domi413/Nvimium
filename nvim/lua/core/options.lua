@@ -7,18 +7,45 @@
 local opt = vim.opt -- for conciseness
 
 -- ╭──────────────────────────────────────────────────────────╮
+-- │ Disable the "~" character at blank lines                 │
+-- ╰──────────────────────────────────────────────────────────╯
+vim.opt.fillchars = {
+	fold = " ",
+	vert = "│",
+	eob = " ",
+	msgsep = "‾",
+}
+
+-- ╭──────────────────────────────────────────────────────────╮
+-- │ Indentation                                              │
+-- ╰──────────────────────────────────────────────────────────╯
+-- Specify size of an indent when using >> and <<
+opt.shiftwidth = 4
+
+-- Number of spaces a tab counts for
+opt.tabstop = 4
+
+-- Convert tabs to spaces
+opt.expandtab = true
+
+-- ╭──────────────────────────────────────────────────────────╮
 -- │ Relative numbers                                         │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Show relative line numbers
 opt.relativenumber = true
 
--- Show absoulte line number on cursor line (when relative line number is one)
+-- Show absoulte line number on cursor line (when relative line number is on)
 opt.number = true
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Line wrapping                                            │
 -- ╰──────────────────────────────────────────────────────────╯
 opt.wrap = false
+
+-- ╭──────────────────────────────────────────────────────────╮
+-- │ Disable Login screen ("Help poor children in Uganda")    │
+-- ╰──────────────────────────────────────────────────────────╯
+opt.shortmess:append("I")
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Search preferences                                       │
@@ -45,18 +72,12 @@ opt.cursorline = true
 opt.termguicolors = true
 
 -- ╭──────────────────────────────────────────────────────────╮
--- │ Indentation                                              │
--- ╰──────────────────────────────────────────────────────────╯
--- Allow backspace on indent, end of line or insert mode start position
-opt.backspace = "indent,eol,start"
-
--- ╭──────────────────────────────────────────────────────────╮
 -- │ Clipboard                                                │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Use system clipboard as default register
 -- This options allows to copy text from neovim and paste it
--- in an external application (e.g. chatGPT :) )
-opt.clipboard:append("unnamedplus")
+-- in an external application e.g. chatGPT :)
+opt.clipboard = "unnamedplus"
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Windows tiling                                           │
