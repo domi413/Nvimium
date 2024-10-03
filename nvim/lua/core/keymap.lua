@@ -12,7 +12,7 @@ local keymap = vim.keymap
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
 keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
 keymap.set("n", "<leader>sr", "<C-w>=", { desc = "Reset splitted window width / height" })
-keymap.set("n", "<leader>sx", ":close<CR>", { desc = "Close current splitted window" })
+keymap.set("n", "<leader>x", ":close<CR>", { desc = "Close current splitted window" })
 
 -- Resize splitted windows
 keymap.set("n", "<leader>v+", ":vertical resize +10<CR>", { desc = "Increase width of splitted window" })
@@ -45,6 +45,9 @@ keymap.set("n", "<leader>O", "O<Esc>", { noremap = true, silent = true, desc = "
 
 -- Toggle case
 keymap.set("n", "<leader>i", "~", { desc = "Toggle case" })
+keymap.set("v", "<leader>i", "~", { desc = "Toggle case" })
+keymap.set("s", "<leader>i", "~", { desc = "Toggle case" })
+keymap.set("x", "<leader>i", "~", { desc = "Toggle case" })
 
 -- Remap 'gx' to open links in the browser
 -- This option should work per default with netrw but kinda doesn't work,
@@ -155,3 +158,26 @@ vim.api.nvim_create_user_command("RunPython", function()
 end, {})
 
 vim.keymap.set("n", "<leader><leader>rp", ":w<cr><cmd>RunPython<cr>", { desc = "Run Python", noremap = true })
+
+-- dotNET
+vim.api.nvim_create_user_command("BuildDotnet", function()
+	vim.cmd("split | term dotnet build") -- Split horizontally and build the project
+end, {})
+
+vim.api.nvim_create_user_command("RunDotnet", function()
+	vim.cmd("split | term dotnet run") -- Split horizontally and run the project
+end, {})
+
+-- Key mappings for the commands
+vim.api.nvim_set_keymap(
+	"n",
+	"<leader><leader>bd",
+	":w<cr><cmd>BuildDotnet<cr>",
+	{ noremap = true, silent = true, desc = "Build .NET" }
+)
+vim.api.nvim_set_keymap(
+	"n",
+	"<leader><leader>rd",
+	":w<cr><cmd>RunDotnet<cr>",
+	{ noremap = true, silent = true, desc = "Run .NET" }
+)

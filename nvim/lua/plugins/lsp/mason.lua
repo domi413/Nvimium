@@ -34,6 +34,7 @@ return {
 				"html",
 				"lua_ls",
 				"pyright",
+				-- "omnisharp",
 			},
 		})
 
@@ -42,7 +43,8 @@ return {
 				"black", -- python formatter
 				"clang-format", -- c/c++ formatter
 				"debugpy",
-				"eslint_d", ----
+				"eslint_d", -- linter
+				"htmlhint", -- html linter
 				"isort", -- python formatter
 				"pylint",
 				"prettier", -- prettier formatter
