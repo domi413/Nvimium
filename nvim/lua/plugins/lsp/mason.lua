@@ -34,7 +34,7 @@ return {
 				"html",
 				"lua_ls",
 				"pyright",
-				-- "omnisharp",
+				-- "omnisharp",  -- doesn't seem to work, install from package manager instead
 			},
 		})
 

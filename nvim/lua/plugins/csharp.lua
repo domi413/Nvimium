@@ -1,3 +1,7 @@
+-- Follow the instructions here:
+-- https://github.com/seblj/roslyn.nvim?tab=readme-ov-file#-installation
+-- Install omnisharp from package manager
+
 return {
 	"seblj/roslyn.nvim",
 	ft = "cs",

@@ -18,7 +18,7 @@ end
 
 -- Define the update_telescope_highlights function to update the highlights
 _G.update_telescope_highlights = function()
-	local bg = vim.api.nvim_get_hl_by_name("Normal", true).background
+	local bg = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
 	if not bg then
 		return
 	end

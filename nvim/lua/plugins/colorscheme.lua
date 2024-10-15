@@ -8,6 +8,7 @@ return {
 			vim.cmd("colorscheme catppuccin")
 		end,
 	},
-	{ "rose-pine/neovim" },
-	{ "neanias/everforest-nvim" },
+	-- { "rose-pine/neovim" },
+	-- { "neanias/everforest-nvim" },
+	{ "rebelot/kanagawa.nvim" },
 }

@@ -12,7 +12,7 @@ local keymap = vim.keymap
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
 keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
 keymap.set("n", "<leader>sr", "<C-w>=", { desc = "Reset splitted window width / height" })
-keymap.set("n", "<leader>x", ":close<CR>", { desc = "Close current splitted window" })
+keymap.set("n", "<leader>x", ":close<CR>", { desc = "Close splitted window" })
 
 -- Resize splitted windows
 keymap.set("n", "<leader>v+", ":vertical resize +10<CR>", { desc = "Increase width of splitted window" })
@@ -69,6 +69,9 @@ keymap.set("n", "<leader>fe", ":Telescope file_browser select_buffer=true<CR>", 
 
 -- Open fuzzy file finder
 keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
+
+-- Open fuzzy content finder
+keymap.set("n", "<leader>fc", "<cmd>Telescope live_grep<cr>", { desc = "Fuzzy find content in cwd" })
 
 -- Change color scheme
 keymap.set(
@@ -128,56 +131,117 @@ vim.api.nvim_create_user_command("RunBash", function()
 	vim.cmd("split | term bash " .. file)
 end, {})
 
-vim.keymap.set("n", "<leader><leader>rb", ":w<cr><cmd>RunBash<cr>", { desc = "Run Bash", noremap = true })
+vim.keymap.set("n", "<leader><leader>rb", ":w<cr><cmd>RunBash<cr>", { desc = "Run Bash" })
 
 -- C
+
+-- Run (compile + execute)
 vim.api.nvim_create_user_command("RunC", function()
 	local file = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".out"
 	-- vim.cmd("vert term gcc " .. file .. " -o " .. output .. " && ./" .. output) -- Split vertically
-	vim.cmd("split | term gcc " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
+	vim.cmd("split | term clang " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
 end, {})
 
 keymap.set("n", "<leader><leader>rc", ":w<cr><cmd>RunC<cr>", { desc = "Run C" })
 
+-- Compile
+vim.api.nvim_create_user_command("CompileC", function()
+	local file = vim.fn.expand("%:t")
+	local output = vim.fn.expand("%:t:r") .. ".out"
+	vim.cmd("split | term clang " .. file .. " -o " .. output) -- Compile without executing
+end, {})
+
+keymap.set("n", "<leader><leader>cc", ":w<cr><cmd>CompileC<cr>", { desc = "Compile C" })
+
 -- C++
+
+-- Run (compile + execute)
 vim.api.nvim_create_user_command("RunCpp", function()
 	local file = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".out"
 	-- vim.cmd("vert term g++ " .. file .. " -o " .. output .. " && ./" .. output) -- Split vertically
-	vim.cmd("split | term g++ " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
+	vim.cmd("split | term clang++ " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
 end, {})
 
 keymap.set("n", "<leader><leader>r+", ":w<cr><cmd>RunCpp<cr>", { desc = "Run C++" })
 
--- Python
-vim.api.nvim_create_user_command("RunPython", function()
-	local file = vim.fn.expand("%:p")
-	-- vim.cmd("vert term python3 " .. file)
-	vim.cmd("split | term python3 " .. file)
+-- Compile
+vim.api.nvim_create_user_command("CompileCpp", function()
+	local file = vim.fn.expand("%:t")
+	local output = vim.fn.expand("%:t:r") .. ".out"
+	vim.cmd("split | term clang++ " .. file .. " -o " .. output) -- Compile without executing
 end, {})
 
-vim.keymap.set("n", "<leader><leader>rp", ":w<cr><cmd>RunPython<cr>", { desc = "Run Python", noremap = true })
+keymap.set("n", "<leader><leader>c+", ":w<cr><cmd>CompileCpp<cr>", { desc = "Compile C++" })
+
+-- Python
+
+-- Run (Interpret and Execute)
+vim.api.nvim_create_user_command("RunPython", function()
+	local file = vim.fn.expand("%:p")
+	vim.cmd("split | term python3 " .. file) -- Split horizontally and run Python script
+end, {})
+
+vim.keymap.set("n", "<leader><leader>rp", ":w<cr><cmd>RunPython<cr>", { desc = "Run Python" })
+
+-- Compile
+vim.api.nvim_create_user_command("CompilePython", function()
+	local file = vim.fn.expand("%:p")
+	vim.cmd("split | term python3 -m py_compile " .. file)
+end, {})
+
+vim.keymap.set("n", "<leader><leader>cp", ":w<cr><cmd>CompilePython<cr>", { desc = "Compile Python" })
 
 -- dotNET
 vim.api.nvim_create_user_command("BuildDotnet", function()
 	vim.cmd("split | term dotnet build") -- Split horizontally and build the project
 end, {})
 
+vim.api.nvim_set_keymap("n", "<leader><leader>bd", ":w<cr><cmd>BuildDotnet<cr>", { desc = "Build .NET" })
+
 vim.api.nvim_create_user_command("RunDotnet", function()
 	vim.cmd("split | term dotnet run") -- Split horizontally and run the project
+	-- vim.cmd("split | term dotnet run --no-build") -- '--no-build' reduces the compile time from ~3.3s to ~1.4s
 end, {})
 
--- Key mappings for the commands
-vim.api.nvim_set_keymap(
-	"n",
-	"<leader><leader>bd",
-	":w<cr><cmd>BuildDotnet<cr>",
-	{ noremap = true, silent = true, desc = "Build .NET" }
-)
-vim.api.nvim_set_keymap(
-	"n",
-	"<leader><leader>rd",
-	":w<cr><cmd>RunDotnet<cr>",
-	{ noremap = true, silent = true, desc = "Run .NET" }
-)
+vim.api.nvim_set_keymap("n", "<leader><leader>rd", ":w<cr><cmd>RunDotnet<cr>", { desc = "Run .NET" })
+
+-- -- ╭──────────────────────────────────────────────────────────╮
+-- -- │ CMake                                                    │
+-- -- ╰──────────────────────────────────────────────────────────╯
+-- -- Function to run cmake --build build
+-- vim.api.nvim_create_user_command("CMakeBuild", function()
+-- 	local build_dir = "build"
+--
+-- 	-- Check if build directory exists
+-- 	if vim.fn.isdirectory(build_dir) == 0 or vim.fn.filereadable(build_dir .. "/CMakeCache.txt") == 0 then
+-- 		vim.cmd(
+-- 			"split | term echo '\27[31mWarning: Build directory or cache not found. Run :CMakeRebuild first.\27[0m'"
+-- 		)
+-- 	else
+-- 		-- If build directory and cache are found, run the build
+-- 		vim.cmd("split | term cmake --build " .. build_dir)
+-- 	end
+-- end, {})
+--
+-- keymap.set("n", "<leader><leader>bm", ":w<cr><cmd>CMakeBuild<cr>", { desc = "Build CMake" })
+--
+-- -- Function to delete and recreate build directory (CMakeRebuild)
+-- vim.api.nvim_create_user_command("CMakeRebuild", function()
+-- 	local build_dir = "build"
+--
+-- 	-- Check if build directory exists
+-- 	if vim.fn.isdirectory(build_dir) == 1 then
+-- 		print("Deleting existing build directory...")
+-- 		vim.fn.delete(build_dir, "rf")
+-- 	end
+--
+-- 	print("Creating new build directory...")
+-- 	vim.fn.mkdir(build_dir)
+--
+-- 	print("Running CMake configuration and build...")
+-- 	vim.cmd("split | term cmake -B " .. build_dir .. " && cmake --build " .. build_dir)
+-- end, {})
+--
+-- keymap.set("n", "<leader><leader>bM", ":w<cr><cmd>CMakeRebuild<cr>", { desc = "Rebuild CMake" })
