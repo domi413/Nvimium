@@ -4,6 +4,18 @@ return {
 		local neoscroll = require("neoscroll")
 
 		neoscroll.setup({
+			mappings = {
+				"<C-u>",
+				"<C-d>",
+				"<C-b>",
+				"<C-f>",
+				"<C-y>",
+				"<C-e>",
+				"zt",
+				"zz",
+				"zb",
+			},
+
 			-- Hide cursor while scrolling
 			hide_cursor = true,
 
@@ -25,7 +37,7 @@ return {
 			-- Function to run after the scrolling animation ends
 			post_hook = nil,
 
-			-- Disable "Performance Mode" on all buffers.
+			-- Disable "Performance Mode" on all buffers. (will disable treesitter while scrollling)
 			performance_mode = false,
 
 			ignored_events = { -- Events ignored while scrolling
@@ -48,10 +60,10 @@ return {
 				neoscroll.ctrl_f({ duration = 200 })
 			end,
 			["<C-y>"] = function()
-				neoscroll.scroll(-0.1, { move_cursor = true, duration = 0 })
+				neoscroll.scroll(-0.1, { move_cursor = true, duration = 10 })
 			end,
 			["<C-e>"] = function()
-				neoscroll.scroll(0.1, { move_cursor = true, duration = 0 })
+				neoscroll.scroll(0.1, { move_cursor = true, duration = 10 })
 			end,
 			["zt"] = function()
 				neoscroll.zt({ half_win_duration = 200 })
@@ -70,4 +82,3 @@ return {
 		end
 	end,
 }
-

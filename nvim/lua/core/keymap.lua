@@ -5,7 +5,6 @@
 vim.g.mapleader = " "
 
 local keymap = vim.keymap
-local command = vim.api.nvim_create_user_command
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Window tiling                                            │
@@ -52,7 +51,7 @@ keymap.set("x", "<leader>i", "~", { desc = "Toggle case" })
 
 -- Remap 'gx' to open links in the browser
 -- This option should work per default with netrw but kinda doesn't work,
--- therefore i remapped it as a workaround
+-- therefore I remapped it as a workaround
 keymap.set("n", "gx", ":!open <cWORD><CR><CR>", { desc = "Open URL under cursor" })
 
 -- Toggle line wrapping
@@ -82,6 +81,9 @@ keymap.set(
 	{ noremap = true, silent = true, desc = "Change theme" }
 )
 
+-- Other Telescope keybindings are defined in lua/plugins/telescope.lua and
+-- lua/plugins/telescope-file-browser.lua
+
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ NVIM Tree (File Explorer)                                │
 -- ╰──────────────────────────────────────────────────────────╯
@@ -95,14 +97,14 @@ keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file ex
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Treesitter                                               │
 -- ╰──────────────────────────────────────────────────────────╯
--- Telescope settings are defined in lua/plugins/telescope.lua
--- and lua/plugins/telescope-file-browser.lua
+-- treesitter configs are defined in
+-- lua/plugins/treesitter/nvim-treesitter-text-objects.lua
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Debugger                                                 │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Toggle Breakpoint
-keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "Toggle Breakpoint" })
+keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>")
 
 -- Start debugging
 keymap.set("n", "<leader>dr", "<cmd> lua require('dap').continue()<CR>")
@@ -111,20 +113,13 @@ keymap.set("n", "<leader>dr", "<cmd> lua require('dap').continue()<CR>")
 -- │ Git                                                      │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Open LazyGit
-keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open Lazy Git" })
+keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open lazy git" })
 
 -- ╭──────────────────────────────────────────────────────────╮
--- │ Run Code                                                 │
+-- │ Code action                                              │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Every code execute shorcut works like this:
--- <leader> + <leader> + ([r]un / [d]ebug / [c]ompile) + [<filetype shorcut>]
---
--- List of filetype shorcuts:
--- Bash   -> b
--- C      -> c
--- C++    -> +
--- dotNET -> d
--- Python -> p
+-- <leader> + <leader> + ([r]un / [b]build / [d]ebug)
 
 -- Function to execute a command in current file dir
 local function current_file_dir(term_command)
@@ -136,130 +131,67 @@ local function current_file_dir(term_command)
 	vim.cmd("lcd " .. file_path)
 
 	-- Execute the command
-	-- To split the terminal vertically set 'split | term' to 'vert term'
+	-- If you want to split the output vertically, change
+	-- 'split | term' to 'vert term'
 	vim.cmd("split | term " .. term_command)
-	-- vim.cmd("vert term " .. term_command)
 
 	-- Reset to the original directory
 	vim.cmd("lcd " .. original_dir)
 end
 
------------------------------------------------------------ Bash
+-- Function to execute a command based on the filetype and action
+local function action_by_filetype(action)
+	local filetype = vim.bo.filetype -- Get filetype
+	local file = vim.fn.expand("%:p") -- Get full path
+	local file_title = vim.fn.expand("%:t") -- Get file name with extension
+	local output = vim.fn.expand("%:t:r") .. ".out" -- Name for compiled output
 
--- Run
-command("RunBash", function()
-	current_file_dir("bash " .. vim.fn.expand("%:p"))
+	-- Bash
+	if filetype == "sh" and action == "run" then
+		current_file_dir("bash " .. file)
+
+	-- C
+	elseif filetype == "c" then
+		if action == "run" then
+			current_file_dir("clang " .. file_title .. " -o " .. output .. " && ./" .. output)
+		elseif action == "compile" then
+			current_file_dir("clang " .. file_title .. " -o " .. output)
+		end
+
+	-- C++
+	elseif filetype == "cpp" then
+		if action == "run" then
+			current_file_dir("clang++ " .. file_title .. " -o " .. output .. " && ./" .. output)
+		elseif action == "compile" then
+			current_file_dir("clang++ " .. file_title .. " -o " .. output)
+		end
+
+	-- C#
+	elseif filetype == "cs" then
+		if action == "run" then
+			current_file_dir("dotnet run")
+		elseif action == "compile" then
+			current_file_dir("dotnet build")
+		end
+
+	-- Python
+	elseif filetype == "python" and action == "run" then
+		current_file_dir("python3 " .. file)
+	else
+		vim.api.nvim_echo({ { "Action not supported for this filetype", "ErrorMsg" } }, false, {})
+	end
+end
+
+-- Create user commands for running and compiling
+local command = vim.api.nvim_create_user_command
+
+command("RunCode", function()
+	action_by_filetype("run")
+end, {})
+command("CompileCode", function()
+	action_by_filetype("compile")
 end, {})
 
-keymap.set("n", "<leader><leader>rb", ":w<cr><cmd>RunBash<cr>", { desc = "Run Bash" })
-
------------------------------------------------------------ C
-
--- Run (compile + execute)
-command("RunC", function()
-	local file = vim.fn.expand("%:t")
-	local output = vim.fn.expand("%:t:r") .. ".out"
-	current_file_dir("clang " .. file .. " -o " .. output .. " && ./" .. output)
-end, {})
-
-keymap.set("n", "<leader><leader>rc", ":w<cr><cmd>RunC<cr>", { desc = "Run C" })
-
--- Compile
-command("CompileC", function()
-	local file = vim.fn.expand("%:t")
-	local output = vim.fn.expand("%:t:r") .. ".out"
-	current_file_dir("clang " .. file .. " -o " .. output)
-end, {})
-
-keymap.set("n", "<leader><leader>cc", ":w<cr><cmd>CompileC<cr>", { desc = "Compile C" })
-
------------------------------------------------------------ C++
-
--- Run (compile + execute)
-command("RunCpp", function()
-	local file = vim.fn.expand("%:t")
-	local output = vim.fn.expand("%:t:r") .. ".out"
-	current_file_dir("clang++ " .. file .. " -o " .. output .. " && ./" .. output)
-end, {})
-
-keymap.set("n", "<leader><leader>r+", ":w<cr><cmd>RunCpp<cr>", { desc = "Run C++" })
-
--- Compile
-command("CompileCpp", function()
-	local file = vim.fn.expand("%:t")
-	local output = vim.fn.expand("%:t:r") .. ".out"
-	current_file_dir("clang++ " .. file .. " -o " .. output)
-end, {})
-
-keymap.set("n", "<leader><leader>c+", ":w<cr><cmd>CompileCpp<cr>", { desc = "Compile C++" })
-
------------------------------------------------------------ Python
-
--- Run (Interpret and Execute)
-command("RunPython", function()
-	current_file_dir("python3 " .. vim.fn.expand("%:p"))
-end, {})
-
-keymap.set("n", "<leader><leader>rp", ":w<cr><cmd>RunPython<cr>", { desc = "Run Python" })
-
--- Compile
-command("CompilePython", function()
-	current_file_dir("python3 -m py_compile " .. vim.fn.expand("%:p"))
-end, {})
-
-keymap.set("n", "<leader><leader>cp", ":w<cr><cmd>CompilePython<cr>", { desc = "Compile Python" })
-
------------------------------------------------------------ dotNET
-
--- Build
-command("BuildDotnet", function()
-	current_file_dir("dotnet build")
-end, {})
-
-keymap.set("n", "<leader><leader>bd", ":w<cr><cmd>BuildDotnet<cr>", { desc = "Build .NET" })
-
--- Run
-command("RunDotnet", function()
-	current_file_dir("dotnet run")
-end, {})
-
-keymap.set("n", "<leader><leader>rd", ":w<cr><cmd>RunDotnet<cr>", { desc = "Run .NET" })
-
--- -- ╭──────────────────────────────────────────────────────────╮
--- -- │ CMake                                                    │
--- -- ╰──────────────────────────────────────────────────────────╯
--- -- Function to run cmake --build build
--- vim.api.nvim_create_user_command("CMakeBuild", function()
--- 	local build_dir = "build"
---
--- 	-- Check if build directory exists
--- 	if vim.fn.isdirectory(build_dir) == 0 or vim.fn.filereadable(build_dir .. "/CMakeCache.txt") == 0 then
--- 		vim.cmd(
--- 			"split | term echo '\27[31mWarning: Build directory or cache not found. Run :CMakeRebuild first.\27[0m'"
--- 		)
--- 	else
--- 		-- If build directory and cache are found, run the build
--- 		vim.cmd("split | term cmake --build " .. build_dir)
--- 	end
--- end, {})
---
--- keymap.set("n", "<leader><leader>bm", ":w<cr><cmd>CMakeBuild<cr>", { desc = "Build CMake" })
---
--- -- Function to delete and recreate build directory (CMakeRebuild)
--- vim.api.nvim_create_user_command("CMakeRebuild", function()
--- 	local build_dir = "build"
---
--- 	-- Check if build directory exists
--- 	if vim.fn.isdirectory(build_dir) == 1 then
--- 		print("Deleting existing build directory...")
--- 		vim.fn.delete(build_dir, "rf")
--- 	end
---
--- 	print("Creating new build directory...")
--- 	vim.fn.mkdir(build_dir)
---
--- 	print("Running CMake configuration and build...")
--- 	vim.cmd("split | term cmake -B " .. build_dir .. " && cmake --build " .. build_dir)
--- end, {})
---
--- keymap.set("n", "<leader><leader>bM", ":w<cr><cmd>CMakeRebuild<cr>", { desc = "Rebuild CMake" })
+-- Key mappings to trigger the commands
+vim.keymap.set("n", "<leader><leader>r", ":RunCode<CR>", { desc = "Run Code" })
+vim.keymap.set("n", "<leader><leader>c", ":CompileCode<CR>", { desc = "Compile Code" })
