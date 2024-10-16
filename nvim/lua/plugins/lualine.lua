@@ -31,17 +31,25 @@ return {
 			},
 		}
 
-		-- Function to update the lualine theme
+		-- Function to set to lualine theme according to the background color
 		local function update_lualine_theme()
-			local ayu_theme = (vim.o.background == "light") and "ayu_light" or "ayu_mirage"
+			local normal_bg_color = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
+			if not normal_bg_color then
+				normal_bg_color = 0xFFFFFF -- Fallback color if not set
+			end
+
+			-- Convert the color to hexadecimal and compare
+			local hex_color = string.format("%06x", normal_bg_color)
+			local brightness_threshold = "7fffff"
+			local ayu_theme = (hex_color > brightness_threshold) and "ayu_light" or "ayu_mirage"
+
 			require("lualine").setup({
 				options = {
-					theme = ayu_theme, -- or bubbles_theme
+					theme = ayu_theme, -- Uses the dynamic theme based on background brightness
 					component_separators = "",
 					section_separators = { left = "", right = "" },
 					disabled_filetypes = { "NvimTree" },
 				},
-				-- Sections and other configurations remain the same
 				sections = {
 					lualine_a = { { "mode", separator = { left = "" }, right_padding = 2 } },
 					lualine_b = { "filename", "branch", "diagnostics" },

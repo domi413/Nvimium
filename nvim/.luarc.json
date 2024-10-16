@@ -1,0 +1,6 @@
+{
+    "diagnostics.globals": [
+        "vim",
+        "close_tab_if_multiple"
+    ]
+}

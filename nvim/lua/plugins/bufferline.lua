@@ -5,9 +5,9 @@ return {
 		-- Function to detect amount of tabs
 		function close_tab_if_multiple()
 			-- Get the number of open tabs
-			local tab_count = vim.fn.tabpagenr('$')
+			local tab_count = vim.fn.tabpagenr("$")
 			if tab_count > 1 then
-				vim.cmd('tabclose')
+				vim.cmd("tabclose")
 			else
 				vim.api.nvim_echo({ { "Cannot close the last tab", "ErrorMsg" } }, false, {})
 			end
@@ -35,6 +35,9 @@ return {
 				close_icon = "",
 
 				separator_style = "thin",
+				indicator = {
+					style = "none",
+				},
 
 				offsets = {
 					{
