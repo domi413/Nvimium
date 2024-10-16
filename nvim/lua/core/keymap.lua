@@ -5,6 +5,7 @@
 vim.g.mapleader = " "
 
 local keymap = vim.keymap
+local command = vim.api.nvim_create_user_command
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Window tiling                                            │
@@ -101,7 +102,7 @@ keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file ex
 -- │ Debugger                                                 │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Toggle Breakpoint
-keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>")
+keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "Toggle Breakpoint" })
 
 -- Start debugging
 keymap.set("n", "<leader>dr", "<cmd> lua require('dap').continue()<CR>")
@@ -110,102 +111,119 @@ keymap.set("n", "<leader>dr", "<cmd> lua require('dap').continue()<CR>")
 -- │ Git                                                      │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Open LazyGit
-keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open lazy git" })
+keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open Lazy Git" })
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Run Code                                                 │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Every code execute shorcut works like this:
--- <leader> + <leader> + [r]un + [<filetype shorcut>]
+-- <leader> + <leader> + ([r]un / [d]ebug / [c]ompile) + [<filetype shorcut>]
 --
 -- List of filetype shorcuts:
 -- Bash   -> b
 -- C      -> c
 -- C++    -> +
+-- dotNET -> d
 -- Python -> p
 
--- Bash
-vim.api.nvim_create_user_command("RunBash", function()
-	local file = vim.fn.expand("%:p")
-	-- vim.cmd("vert term bash " .. file)
-	vim.cmd("split | term bash " .. file)
+-- Function to execute a command in current file dir
+local function current_file_dir(term_command)
+	-- Save the current directory
+	local original_dir = vim.fn.getcwd()
+
+	-- Change to the directory of the current file
+	local file_path = vim.fn.expand("%:p:h")
+	vim.cmd("lcd " .. file_path)
+
+	-- Execute the command
+	-- To split the terminal vertically set 'split | term' to 'vert term'
+	vim.cmd("split | term " .. term_command)
+	-- vim.cmd("vert term " .. term_command)
+
+	-- Reset to the original directory
+	vim.cmd("lcd " .. original_dir)
+end
+
+----------------------------------------------------------- Bash
+
+-- Run
+command("RunBash", function()
+	current_file_dir("bash " .. vim.fn.expand("%:p"))
 end, {})
 
-vim.keymap.set("n", "<leader><leader>rb", ":w<cr><cmd>RunBash<cr>", { desc = "Run Bash" })
+keymap.set("n", "<leader><leader>rb", ":w<cr><cmd>RunBash<cr>", { desc = "Run Bash" })
 
--- C
+----------------------------------------------------------- C
 
 -- Run (compile + execute)
-vim.api.nvim_create_user_command("RunC", function()
+command("RunC", function()
 	local file = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".out"
-	-- vim.cmd("vert term gcc " .. file .. " -o " .. output .. " && ./" .. output) -- Split vertically
-	vim.cmd("split | term clang " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
+	current_file_dir("clang " .. file .. " -o " .. output .. " && ./" .. output)
 end, {})
 
 keymap.set("n", "<leader><leader>rc", ":w<cr><cmd>RunC<cr>", { desc = "Run C" })
 
 -- Compile
-vim.api.nvim_create_user_command("CompileC", function()
+command("CompileC", function()
 	local file = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".out"
-	vim.cmd("split | term clang " .. file .. " -o " .. output) -- Compile without executing
+	current_file_dir("clang " .. file .. " -o " .. output)
 end, {})
 
 keymap.set("n", "<leader><leader>cc", ":w<cr><cmd>CompileC<cr>", { desc = "Compile C" })
 
--- C++
+----------------------------------------------------------- C++
 
 -- Run (compile + execute)
-vim.api.nvim_create_user_command("RunCpp", function()
+command("RunCpp", function()
 	local file = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".out"
-	-- vim.cmd("vert term g++ " .. file .. " -o " .. output .. " && ./" .. output) -- Split vertically
-	vim.cmd("split | term clang++ " .. file .. " -o " .. output .. " && ./" .. output) -- Split horizontally
+	current_file_dir("clang++ " .. file .. " -o " .. output .. " && ./" .. output)
 end, {})
 
 keymap.set("n", "<leader><leader>r+", ":w<cr><cmd>RunCpp<cr>", { desc = "Run C++" })
 
 -- Compile
-vim.api.nvim_create_user_command("CompileCpp", function()
+command("CompileCpp", function()
 	local file = vim.fn.expand("%:t")
 	local output = vim.fn.expand("%:t:r") .. ".out"
-	vim.cmd("split | term clang++ " .. file .. " -o " .. output) -- Compile without executing
+	current_file_dir("clang++ " .. file .. " -o " .. output)
 end, {})
 
 keymap.set("n", "<leader><leader>c+", ":w<cr><cmd>CompileCpp<cr>", { desc = "Compile C++" })
 
--- Python
+----------------------------------------------------------- Python
 
 -- Run (Interpret and Execute)
-vim.api.nvim_create_user_command("RunPython", function()
-	local file = vim.fn.expand("%:p")
-	vim.cmd("split | term python3 " .. file) -- Split horizontally and run Python script
+command("RunPython", function()
+	current_file_dir("python3 " .. vim.fn.expand("%:p"))
 end, {})
 
-vim.keymap.set("n", "<leader><leader>rp", ":w<cr><cmd>RunPython<cr>", { desc = "Run Python" })
+keymap.set("n", "<leader><leader>rp", ":w<cr><cmd>RunPython<cr>", { desc = "Run Python" })
 
 -- Compile
-vim.api.nvim_create_user_command("CompilePython", function()
-	local file = vim.fn.expand("%:p")
-	vim.cmd("split | term python3 -m py_compile " .. file)
+command("CompilePython", function()
+	current_file_dir("python3 -m py_compile " .. vim.fn.expand("%:p"))
 end, {})
 
-vim.keymap.set("n", "<leader><leader>cp", ":w<cr><cmd>CompilePython<cr>", { desc = "Compile Python" })
+keymap.set("n", "<leader><leader>cp", ":w<cr><cmd>CompilePython<cr>", { desc = "Compile Python" })
 
--- dotNET
-vim.api.nvim_create_user_command("BuildDotnet", function()
-	vim.cmd("split | term dotnet build") -- Split horizontally and build the project
+----------------------------------------------------------- dotNET
+
+-- Build
+command("BuildDotnet", function()
+	current_file_dir("dotnet build")
 end, {})
 
-vim.api.nvim_set_keymap("n", "<leader><leader>bd", ":w<cr><cmd>BuildDotnet<cr>", { desc = "Build .NET" })
+keymap.set("n", "<leader><leader>bd", ":w<cr><cmd>BuildDotnet<cr>", { desc = "Build .NET" })
 
-vim.api.nvim_create_user_command("RunDotnet", function()
-	vim.cmd("split | term dotnet run") -- Split horizontally and run the project
-	-- vim.cmd("split | term dotnet run --no-build") -- '--no-build' reduces the compile time from ~3.3s to ~1.4s
+-- Run
+command("RunDotnet", function()
+	current_file_dir("dotnet run")
 end, {})
 
-vim.api.nvim_set_keymap("n", "<leader><leader>rd", ":w<cr><cmd>RunDotnet<cr>", { desc = "Run .NET" })
+keymap.set("n", "<leader><leader>rd", ":w<cr><cmd>RunDotnet<cr>", { desc = "Run .NET" })
 
 -- -- ╭──────────────────────────────────────────────────────────╮
 -- -- │ CMake                                                    │
