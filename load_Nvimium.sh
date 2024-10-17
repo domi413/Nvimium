@@ -3,8 +3,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
 # First delete old configs
 rm -rf ~/.config/nvim/
-sudo rm -rf ~/.local/share/nvim/
 sudo rm -rf ~/.local/state/nvim/
+
+# Delete everything in the nvim directory except the roslyn directory
+find ~/.local/share/nvim/ -mindepth 1 -maxdepth 1 ! -name 'roslyn' -exec sudo rm -rf {} +
 
 # Delete neovim default themes
 if [ -d "/usr/share/nvim/runtime/colors/" ]; then
