@@ -10,5 +10,4 @@ return {
 	},
 	-- { "rose-pine/neovim" },
 	-- { "neanias/everforest-nvim" },
-	{ "rebelot/kanagawa.nvim" },
 }

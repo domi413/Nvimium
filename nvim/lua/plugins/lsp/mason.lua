@@ -46,11 +46,11 @@ return {
 				"eslint_d", -- linter
 				"htmlhint", -- html linter
 				"isort", -- python formatter
-				"pylint",
 				"prettier", -- prettier formatter
 				"shellcheck",
 				"shfmt", -- shell formatter
 				"stylua", -- lua formatter
+				-- "ruff", -- python linter
 			},
 		})
 	end,
