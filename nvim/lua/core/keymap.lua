@@ -7,6 +7,14 @@ vim.g.mapleader = " "
 local keymap = vim.keymap
 
 -- ╭──────────────────────────────────────────────────────────╮
+-- │ Mouse                                                    │
+-- ╰──────────────────────────────────────────────────────────╯
+vim.cmd([[
+  aunmenu PopUp.How-to\ disable\ mouse
+  aunmenu PopUp.-1-
+]])
+
+-- ╭──────────────────────────────────────────────────────────╮
 -- │ Window tiling                                            │
 -- ╰──────────────────────────────────────────────────────────╯
 keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
@@ -74,12 +82,12 @@ keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy f
 keymap.set("n", "<leader>fc", "<cmd>Telescope live_grep<cr>", { desc = "Fuzzy find content in cwd" })
 
 -- Change color scheme
-keymap.set(
-	"n",
-	"<leader>ft",
-	"<cmd>Telescope colorscheme enable_preview=true<cr>",
-	{ noremap = true, silent = true, desc = "Change theme" }
-)
+keymap.set("n", "<leader>ft", "<cmd>Telescope colorscheme enable_preview=true<cr>", { desc = "Change theme" })
+
+-- Switch tabs
+vim.keymap.set("n", "<leader>st", function()
+	require("telescope").extensions["telescope-tabs"].list_tabs()
+end, { desc = "Switch tabs" })
 
 -- Other Telescope keybindings are defined in lua/plugins/telescope.lua and
 -- lua/plugins/telescope-file-browser.lua
@@ -87,7 +95,7 @@ keymap.set(
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ NVIM Tree (File Explorer)                                │
 -- ╰──────────────────────────────────────────────────────────╯
-keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
+keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file explorer" })
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ LSP                                                      │
@@ -177,9 +185,31 @@ local function action_by_filetype(action)
 			current_file_dir("dotnet build")
 		end
 
+	-- Go
+	elseif filetype == "go" then
+		if action == "run" then
+			current_file_dir("go run " .. file)
+		elseif action == "compile" then
+			current_file_dir("go build -o " .. output .. " " .. file)
+		end
+
+	-- Java
+	elseif filetype == "java" then
+		if action == "run" then
+			current_file_dir("javac " .. file_title .. " && java " .. vim.fn.expand("%:t:r"))
+		elseif action == "compile" then
+			current_file_dir("javac " .. file_title)
+		end
+
+	-- Lua
+	elseif filetype == "lua" and action == "run" then
+		current_file_dir("lua " .. file)
+
 	-- Python
 	elseif filetype == "python" and action == "run" then
 		current_file_dir("python3 " .. file)
+
+	-- ...
 	else
 		vim.api.nvim_echo({ { "Action not supported for this filetype", "ErrorMsg" } }, false, {})
 	end

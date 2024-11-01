@@ -29,9 +29,9 @@ return {
 			ensure_installed = {
 				"bashls",
 				"clangd",
-				"cssls",
 				"emmet_ls",
-				"html",
+				"gopls", -- go lsp
+				-- "jdtls", -- java lsp -> install from package manager
 				"lua_ls",
 				"pyright",
 				-- "omnisharp",  -- doesn't seem to work, install from package manager instead
@@ -45,7 +45,7 @@ return {
 				"debugpy",
 				"eslint_d", -- linter
 				"htmlhint", -- html linter
-				"isort", -- python formatter
+				"isort", -- python import formatter
 				"prettier", -- prettier formatter
 				"shellcheck",
 				"shfmt", -- shell formatter

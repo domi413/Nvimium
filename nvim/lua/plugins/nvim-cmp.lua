@@ -12,6 +12,7 @@ return {
 	config = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
+		local lspkind = require("lspkind")
 
 		require("luasnip.loaders.from_vscode").lazy_load()
 
@@ -21,6 +22,18 @@ return {
 		cmp.setup({
 			completion = {
 				completeopt = "menu,menuone,preview,noselect",
+			},
+			formatting = {
+				expandable_indicator = true,
+				fields = { "abbr", "kind", "menu" }, -- Add this line to specify required fields
+				format = lspkind.cmp_format({
+					mode = "symbol_text",
+					maxwidth = {
+						menu = 10,
+						abbr = 10,
+					},
+					ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+				}),
 			},
 			snippet = { -- configure how nvim-cmp interacts with snippet engine
 				expand = function(args)
@@ -76,10 +89,11 @@ return {
 			-- end, { "i", "s" }),
 			-- sources for autocompletion
 
+			-- Sources for the autocompletion
 			sources = cmp.config.sources({
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" }, -- snippets
-				{ name = "buffer" }, -- text within current buffer
+				-- { name = "buffer" }, -- text within current buffer
 				{ name = "path" }, -- file system paths
 			}),
 		})

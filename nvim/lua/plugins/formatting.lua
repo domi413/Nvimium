@@ -33,10 +33,11 @@ return {
 					end,
 				},
 			},
-			format_on_save = {
+			-- format_on_save = {
+			format_after_save = {
 				lsp_fallback = true,
-				async = false,
-				timeout_ms = 500,
+				-- async = false,
+				-- timeout_ms = 1000, --bigger timeout because black is slow af
 			},
 		})
 	end,
