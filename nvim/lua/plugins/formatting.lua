@@ -29,15 +29,14 @@ return {
 				clang_format = {
 					command = "clang-format",
 					append_args = function()
-						return { "--style={BasedOnStyle: LLVM, IndentWidth: 4, ColumnLimit: 80}" }
+						return { "--style={BasedOnStyle: LLVM, IndentWidth: 4, ColumnLimit: 80, ReflowComments: false}" }
 					end,
 				},
 			},
-			-- format_on_save = {
-			format_after_save = {
+			format_on_save = {
 				lsp_fallback = true,
-				-- async = false,
-				-- timeout_ms = 1000, --bigger timeout because black is slow af
+				async = false,
+				timeout_ms = 500,
 			},
 		})
 	end,

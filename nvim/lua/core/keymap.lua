@@ -33,8 +33,14 @@ keymap.set("n", "<leader>h-", ":resize -5<CR>", { desc = "Decrease height of spl
 -- ╰──────────────────────────────────────────────────────────╯
 keymap.set("n", "<leader>nt", ":tabnew<CR>", { desc = "Open new tab" })
 keymap.set("n", "<leader>ct", ":tabclose<CR>", { desc = "Close tab" })
-keymap.set("n", "<Tab>", ":tabn<CR>") -- Go to next tab
-keymap.set("n", "<S-Tab>", ":tabp<CR>") -- To go previous tab
+
+keymap.set("n", "<C-p>", ":tabn<CR>") -- Go to next tab
+keymap.set("n", "<C-n>", ":tabp<CR>") -- To go previous tab
+
+-- <Tab> and <C-i> are equivalent, therefore Tab overwrites ctrl+i,
+-- use Ctrl+shift+i instead to get the same result as ctrl+i
+-- keymap.set("n", "<Tab>", ":tabn<CR>") -- Go to next tab
+-- keymap.set("n", "<S-Tab>", ":tabp<CR>") -- To go previous tab
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Editing / Editor                                         │
@@ -159,6 +165,7 @@ local function action_by_filetype(action)
 
 	-- Bash
 	if filetype == "sh" and action == "run" then
+		vim.cmd("silent !chmod +x " .. file)
 		current_file_dir("bash " .. file)
 
 	-- C
