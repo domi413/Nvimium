@@ -43,7 +43,7 @@ return {
 				"java",
 				"javascript",
 				"json",
-				"latexk",
+				"latex",
 				"lua",
 				"markdown",
 				"python",
