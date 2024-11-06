@@ -35,6 +35,7 @@ return {
 				"lua_ls",
 				"pyright",
 				-- "omnisharp",  -- doesn't seem to work, install from package manager instead
+				"texlab",
 			},
 		})
 

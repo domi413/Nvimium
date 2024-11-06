@@ -43,6 +43,7 @@ return {
 				"java",
 				"javascript",
 				"json",
+				"latex",
 				"lua",
 				"markdown",
 				"python",
@@ -58,4 +59,3 @@ return {
 		})
 	end,
 }
-

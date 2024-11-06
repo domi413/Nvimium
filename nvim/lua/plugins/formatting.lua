@@ -21,9 +21,9 @@ return {
 				yaml = { "prettier" },
 			},
 			formatters = {
-				prettier = {
+				black = {
 					prepend_args = function()
-						return { "--tab-width", "4" }
+						return { "--fast" }
 					end,
 				},
 				clang_format = {
@@ -32,10 +32,14 @@ return {
 						return { "--style={BasedOnStyle: LLVM, IndentWidth: 4, ColumnLimit: 80, ReflowComments: false}" }
 					end,
 				},
+				prettier = {
+					prepend_args = function()
+						return { "--tab-width", "4" }
+					end,
+				},
 			},
 			format_after_save = {
 				lsp_fallback = true,
-				async = false,
 			},
 			-- format_on_save = {
 			-- 	lsp_fallback = true,

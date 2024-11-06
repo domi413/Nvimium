@@ -85,16 +85,6 @@ return {
 					capabilities = capabilities,
 				})
 			end,
-			-- custom handler for bash-language-server
-			vim.api.nvim_create_autocmd("FileType", {
-				pattern = "sh",
-				callback = function()
-					vim.lsp.start({
-						name = "bash-language-server",
-						cmd = { "bash-language-server", "start" },
-					})
-				end,
-			}),
 			["emmet_ls"] = function()
 				-- configure emmet language server
 				lspconfig["emmet_ls"].setup({
@@ -120,6 +110,7 @@ return {
 							-- make the language server recognize "vim" global
 							diagnostics = {
 								globals = { "vim" },
+								disable = { "missing-fields" },
 							},
 							completion = {
 								callSnippet = "Replace",
