@@ -74,6 +74,9 @@ keymap.set("n", "<leader>$", ":set wrap!<CR>", { desc = "Toggle line wrapping" }
 -- Save file
 keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save file" })
 
+-- Repeat last macro
+keymap.set("n", ",", "@@", { desc = "Repeat last macro" })
+
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Telescope                                                │
 -- ╰──────────────────────────────────────────────────────────╯
@@ -89,6 +92,9 @@ keymap.set("n", "<leader>fc", "<cmd>Telescope live_grep<cr>", { desc = "Fuzzy fi
 
 -- Change color scheme
 keymap.set("n", "<leader>ft", "<cmd>Telescope colorscheme enable_preview=true<cr>", { desc = "Change theme" })
+
+-- Browse TODO comments
+keymap.set("n", "<leader>fg", "<cmd>TodoTelescope<cr>", { desc = "Browse TODO comments" })
 
 -- Switch tabs
 vim.keymap.set("n", "<leader>st", function()
@@ -117,17 +123,34 @@ keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file ex
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Debugger                                                 │
 -- ╰──────────────────────────────────────────────────────────╯
--- Toggle Breakpoint
-keymap.set("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>")
-
--- Start debugging
-keymap.set("n", "<leader>dr", "<cmd> lua require('dap').continue()<CR>")
+-- debugger configs are defined in lua/plugins/debugger/nvim-dap.lua
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Git                                                      │
 -- ╰──────────────────────────────────────────────────────────╯
 -- Open LazyGit
 keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open lazy git" })
+
+-- ╭──────────────────────────────────────────────────────────╮
+-- │ Codeium                                                  │
+-- ╰──────────────────────────────────────────────────────────╯
+-- ctrl+f to accept the completion
+vim.keymap.set("i", "<C-f>", function()
+	return vim.fn["codeium#Accept"]()
+end, { expr = true, silent = true })
+
+-- ctrl+; and ctrl+, to cycle completions
+vim.keymap.set("i", "<c-.>", function()
+	return vim.fn["codeium#CycleCompletions"](1)
+end, { expr = true, silent = true })
+vim.keymap.set("i", "<c-,>", function()
+	return vim.fn["codeium#CycleCompletions"](-1)
+end, { expr = true, silent = true })
+
+-- ctrl+x to reject completion
+vim.keymap.set("i", "<c-x>", function()
+	return vim.fn["codeium#Clear"]()
+end, { expr = true, silent = true })
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Code action                                              │
@@ -207,6 +230,10 @@ local function action_by_filetype(action)
 		elseif action == "compile" then
 			current_file_dir("javac " .. file_title)
 		end
+
+	-- JavaScript / TypeScript
+	elseif (filetype == "javascript" or filetype == "typescript") and action == "run" then
+		current_file_dir("node " .. file)
 
 	-- Lua
 	elseif filetype == "lua" and action == "run" then

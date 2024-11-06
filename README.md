@@ -1,3 +1,1 @@
-# Nvimium
-
-yet another neovim distro
+nvim configs

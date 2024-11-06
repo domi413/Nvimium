@@ -29,9 +29,7 @@ return {
 			ensure_installed = {
 				"bashls",
 				"clangd",
-				"emmet_ls",
-				"gopls", -- go lsp
-				-- "jdtls", -- java lsp -> install from package manager
+				-- "jdtls", -- Install from package manager because of install path
 				"lua_ls",
 				"pyright",
 				-- "omnisharp",  -- doesn't seem to work, install from package manager instead
@@ -43,15 +41,17 @@ return {
 			ensure_installed = {
 				"black", -- python formatter
 				"clang-format", -- c/c++ formatter
-				"debugpy",
-				"eslint_d", -- linter
-				"htmlhint", -- html linter
-				"isort", -- python import formatter
+				-- "debugpy",
+				-- "delve",
+				"htmlhint",
+				"isort", -- python formatter
+				-- "js-debug-adapter",
 				"prettier", -- prettier formatter
+				-- "ruff", -- python formatter
 				"shellcheck",
 				"shfmt", -- shell formatter
 				"stylua", -- lua formatter
-				-- "ruff", -- python linter
+				"typescript-language-server", -- js / ts
 			},
 		})
 	end,

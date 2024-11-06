@@ -1,11 +1,40 @@
 return {
 	"mfussenegger/nvim-dap",
-	dependencies = { "rcarriga/nvim-dap-ui", "mfussenegger/nvim-dap-python" },
+	dependencies = {
+		"rcarriga/nvim-dap-ui", -- UI for nvim-dap
+		"theHamsta/nvim-dap-virtual-text", -- Inlines the values for variables as virtual text
+		"nvim-neotest/nvim-nio",
+
+		-- Debug-adapter per filetype
+		"mfussenegger/nvim-dap-python",
+		"leoluz/nvim-dap-go",
+		"mxsdev/nvim-dap-vscode-js",
+		"mfussenegger/nvim-jdtls",
+	},
+
 	config = function()
-		require("dap-python").setup("/usr/bin/python3")
+		-- Breakpoint highlighting
+		local dap = require("dap")
+		local dapui = require("dapui")
+
+		require("nvim-dap-virtual-text").setup({
+			enabled = true,
+			highlight_changed_variables = true,
+			virt_text_pos = "eol", -- use inline or eol
+			all_frames = true,
+		})
 
 		require("dapui").setup()
-		local dap, dapui = require("dap"), require("dapui")
+		require("dap-go").setup()
+		require("dap-python").setup()
+		-- require("dap-vscode-js").setup() -- TODO:
+		-- TODO: C/C++ debugger
+		-- TODO: java debugger
+		-- TODO: C# debugger
+		require("nvim-treesitter.install").update({ with_sync = true })
+
+		-- Breakpoint color
+		vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DiagnosticSignError" })
 
 		dap.listeners.before.attach.dapui_config = function()
 			dapui.open()
@@ -20,27 +49,9 @@ return {
 			dapui.close()
 		end
 
-		vim.cmd("hi DapBreakpointColor guifg=#fa4848")
-		vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpointColor", linehl = "", numhl = "" })
-
-		dap.adapters.lldb = {
-			type = "executable",
-			command = "/usr/bin/lldb-dap",
-			name = "lldb",
-		}
-		dap.configurations.cpp = {
-			{
-				name = "Launch",
-				type = "lldb",
-				request = "launch",
-				program = function()
-					return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-				end,
-				cwd = "${workspaceFolder}",
-				stopOnEntry = false,
-				args = {},
-				runInTerminal = false,
-			},
-		}
+		vim.keymap.set("n", "<leader>dr", dap.continue, { desc = "[DEBUG] Start / Stop" })
+		vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "[DEBUG] Step into" })
+		vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "[DEBUG] Step over" })
+		vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "[DEBUG] Step out" })
 	end,
 }

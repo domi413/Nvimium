@@ -3,6 +3,7 @@ return {
 	config = function()
 		require("conform").setup({
 			formatters_by_ft = {
+				bash = { "shfmt" },
 				c = { "clang_format" },
 				css = { "prettier" },
 				cpp = { "clang_format" },
@@ -14,7 +15,7 @@ return {
 				lua = { "stylua" },
 				markdown = { "prettier" },
 				python = { "isort", "black" },
-				rust = { "rustfmt", lsp_format = "fallback" },
+				-- rust = { "rustfmt" },
 				svelte = { "prettier" },
 				typescript = { "prettier" },
 				typescriptreact = { "prettier" },
