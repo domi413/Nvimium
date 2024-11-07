@@ -49,9 +49,11 @@ return {
 			dapui.close()
 		end
 
+		vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "[DEBUG] Toggle Breakpoint" })
 		vim.keymap.set("n", "<leader>dr", dap.continue, { desc = "[DEBUG] Start / Stop" })
 		vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "[DEBUG] Step into" })
 		vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "[DEBUG] Step over" })
 		vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "[DEBUG] Step out" })
+		vim.keymap.set("n", "<leader>dC", dap.clear_breakpoints, { desc = "[DEBUG] Clear all Breakpoints" })
 	end,
 }
