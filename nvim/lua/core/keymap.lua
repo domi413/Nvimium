@@ -134,23 +134,7 @@ keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open lazy git" })
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Codeium                                                  │
 -- ╰──────────────────────────────────────────────────────────╯
--- ctrl+f to accept the completion
-vim.keymap.set("i", "<C-f>", function()
-	return vim.fn["codeium#Accept"]()
-end, { expr = true, silent = true })
-
--- ctrl+; and ctrl+, to cycle completions
-vim.keymap.set("i", "<c-.>", function()
-	return vim.fn["codeium#CycleCompletions"](1)
-end, { expr = true, silent = true })
-vim.keymap.set("i", "<c-,>", function()
-	return vim.fn["codeium#CycleCompletions"](-1)
-end, { expr = true, silent = true })
-
--- ctrl+x to reject completion
-vim.keymap.set("i", "<c-x>", function()
-	return vim.fn["codeium#Clear"]()
-end, { expr = true, silent = true })
+-- Codeium keybindings are defined in lua/plugins/codeium.lua
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Code action                                              │
