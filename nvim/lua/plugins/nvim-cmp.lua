@@ -23,6 +23,20 @@ return {
 			completion = {
 				completeopt = "menu,menuone,preview,noselect",
 			},
+			window = {
+				completion = {
+					border = "rounded",
+					winhighlight = "NormalFloat:FloatBorder,CursorLine:Visual,Search:None",
+					col_offset = -3,
+					side_padding = 1,
+					scrollbar = false,
+				},
+				documentation = {
+					border = "rounded",
+					scrollbar = false,
+					winhighlight = "NormalFloat:FloatBorder,CursorLine:Visual,Search:None",
+				},
+			},
 			formatting = {
 				expandable_indicator = true,
 				fields = { "abbr", "kind", "menu" }, -- Add this line to specify required fields

@@ -8,6 +8,6 @@ return {
 			vim.cmd("colorscheme catppuccin")
 		end,
 	},
-	-- { "rose-pine/neovim" },
-	-- { "neanias/everforest-nvim" },
+	{ "rose-pine/neovim" },
+	-- { "scottmckendry/cyberdream.nvim" }, -- would be great theme for blurred background
 }
