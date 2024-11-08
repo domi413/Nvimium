@@ -6,8 +6,8 @@ return {
 			mappings = {
 				t = { j = { false } }, --lazygit navigation fix
 				v = { j = { k = false } }, -- visual select fix
+				s = { j = { k = false } }, -- selection mode (snippets) fix
 			},
 		})
 	end,
 }
-

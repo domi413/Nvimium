@@ -29,8 +29,8 @@ return {
 				format = lspkind.cmp_format({
 					mode = "symbol_text",
 					maxwidth = {
-						menu = 40,
-						abbr = 40,
+						menu = 15,
+						abbr = 15,
 					},
 					ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 				}),
