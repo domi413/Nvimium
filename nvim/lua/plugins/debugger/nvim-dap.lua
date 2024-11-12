@@ -8,8 +8,7 @@ return {
 		-- Debug-adapter per filetype
 		"mfussenegger/nvim-dap-python",
 		"leoluz/nvim-dap-go",
-		"mxsdev/nvim-dap-vscode-js",
-		"mfussenegger/nvim-jdtls",
+		"nicholasmata/nvim-dap-cs",
 	},
 
 	config = function()
@@ -27,10 +26,10 @@ return {
 		require("dapui").setup()
 		require("dap-go").setup()
 		require("dap-python").setup()
-		-- require("dap-vscode-js").setup() -- TODO:
 		-- TODO: C/C++ debugger
 		-- TODO: java debugger
-		-- TODO: C# debugger
+		require("dap-cs").setup()
+
 		require("nvim-treesitter.install").update({ with_sync = true })
 
 		-- Breakpoint color
@@ -55,5 +54,9 @@ return {
 		vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "[DEBUG] Step over" })
 		vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "[DEBUG] Step out" })
 		vim.keymap.set("n", "<leader>dC", dap.clear_breakpoints, { desc = "[DEBUG] Clear all Breakpoints" })
+		vim.keymap.set("n", "<leader>dx", function()
+			dap.terminate()
+			dapui.close()
+		end, { desc = "[DEBUG] Terminate" })
 	end,
 }

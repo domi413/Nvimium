@@ -1,5 +1,6 @@
 -- Follow the instructions here:
 -- https://github.com/seblj/roslyn.nvim?tab=readme-ov-file#-installation
+-- https://dev.azure.com/azure-public/vside/_artifacts/feed/vs-impl/NuGet/Microsoft.CodeAnalysis.LanguageServer.linux-x64/overview/4.13.0-2.24558.12
 -- Install omnisharp from package manager
 
 return {

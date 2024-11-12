@@ -41,17 +41,19 @@ return {
 			ensure_installed = {
 				"black", -- python formatter
 				"clang-format", -- c/c++ formatter
-				-- "debugpy",
-				-- "delve",
 				"htmlhint",
 				"isort", -- python formatter
-				-- "js-debug-adapter",
 				"prettier", -- prettier formatter
 				-- "ruff", -- python formatter
 				"shellcheck",
 				"shfmt", -- shell formatter
 				"stylua", -- lua formatter
 				"typescript-language-server", -- js / ts
+
+				-- Install following debugger from package manager
+				-- "debugpy",
+				-- "delve",
+				-- "netcoredbg"
 			},
 		})
 	end,
