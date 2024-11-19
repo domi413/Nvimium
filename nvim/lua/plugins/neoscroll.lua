@@ -68,10 +68,16 @@ return {
 			["zt"] = function()
 				neoscroll.zt({ half_win_duration = 200 })
 			end,
+			["z+"] = function()
+				neoscroll.zt({ half_win_duration = 200 })
+			end,
 			["zz"] = function()
 				neoscroll.zz({ half_win_duration = 200 })
 			end,
 			["zb"] = function()
+				neoscroll.zb({ half_win_duration = 200 })
+			end,
+			["z-"] = function()
 				neoscroll.zb({ half_win_duration = 200 })
 			end,
 		}

@@ -10,4 +10,5 @@ return {
 	},
 	{ "rose-pine/neovim" },
 	-- { "scottmckendry/cyberdream.nvim" }, -- would be great theme for blurred background
+	-- { "olivercederborg/poimandres.nvim" },
 }

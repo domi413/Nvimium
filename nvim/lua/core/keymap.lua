@@ -63,19 +63,29 @@ keymap.set("v", "<leader>i", "~", { desc = "Toggle case" })
 keymap.set("s", "<leader>i", "~", { desc = "Toggle case" })
 keymap.set("x", "<leader>i", "~", { desc = "Toggle case" })
 
--- Remap 'gx' to open links in the browser
+-- NOTE:: Remap 'gx' to open links in the browser
 -- This option should work per default with netrw but kinda doesn't work,
 -- therefore I remapped it as a workaround
-keymap.set("n", "gx", ":!open <cWORD><CR><CR>", { desc = "Open URL under cursor" })
+-- INFO: IT actually works now
+
+-- keymap.set("n", "gx", ":sil !open <C-r><C-a><CR>", { desc = "Open URL under cursor" })
 
 -- Toggle line wrapping
 keymap.set("n", "<leader>$", ":set wrap!<CR>", { desc = "Toggle line wrapping" })
+
+-- Toggle outline
+keymap.set("n", "<leader>co", "<cmd>Outline<CR>", { desc = "Toggle outline" })
 
 -- Save file
 keymap.set("n", "<leader>w", ":w<CR>", { desc = "Save file" })
 
 -- Repeat last macro
 keymap.set("n", ",", "@@", { desc = "Repeat last macro" })
+
+-- ╭──────────────────────────────────────────────────────────╮
+-- │ UndoTree                                                 │
+-- ╰──────────────────────────────────────────────────────────╯
+keymap.set("n", "<leader>ut", ":UndotreeToggle<CR>", { desc = "Toggle undoTree" })
 
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Telescope                                                │
