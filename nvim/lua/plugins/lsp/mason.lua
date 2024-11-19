@@ -29,6 +29,7 @@ return {
 			ensure_installed = {
 				"bashls",
 				"clangd",
+				"gopls",
 				-- "jdtls", -- Install from package manager because of install path
 				"lua_ls",
 				"pyright",
@@ -50,7 +51,7 @@ return {
 				"stylua", -- lua formatter
 				"typescript-language-server", -- js / ts
 
-				-- Install following debugger from package manager
+				-- Install debugger from package manager
 				-- "debugpy",
 				-- "delve",
 				-- "netcoredbg"

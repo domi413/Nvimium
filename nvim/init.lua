@@ -27,6 +27,7 @@ vim.opt.rtp:prepend(lazypath)
 require("core.disable_cutting")
 require("core.options")
 require("core.keymap")
+require("core.run_code")
 
 -- Setup lazy.nvim
 require("lazy").setup({
