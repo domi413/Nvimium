@@ -144,6 +144,12 @@ keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<cr>", { desc = "Toggle file ex
 -- Open LazyGit
 keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", { desc = "Open lazy git" })
 
+-- Gitsigns
+vim.keymap.set("n", "<leader>gh", function()
+	vim.cmd("Gitsigns toggle_deleted")
+	vim.cmd("Gitsigns toggle_linehl")
+end, { desc = "Toggle show changes" })
+
 -- ╭──────────────────────────────────────────────────────────╮
 -- │ Codeium                                                  │
 -- ╰──────────────────────────────────────────────────────────╯

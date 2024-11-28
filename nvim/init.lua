@@ -28,6 +28,7 @@ require("core.disable_cutting")
 require("core.options")
 require("core.keymap")
 require("core.run_code")
+require("core.CMake")
 
 -- Setup lazy.nvim
 require("lazy").setup({

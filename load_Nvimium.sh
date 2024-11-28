@@ -17,4 +17,5 @@ fi
 cp -r "$SCRIPT_DIR/nvim/" ~/.config/
 nvim # start neovim to load configs
 
-# Note: csharp won't work out of the box, read the csharp.lua for more info
+# INFO: csharp won't work out of the box, read the csharp.lua for more info
+# INFO: If shadafile error appears, run `rm ~/.local/state/nvim/shada`

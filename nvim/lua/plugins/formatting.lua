@@ -17,6 +17,7 @@ return {
 				python = { "isort", "black" },
 				-- rust = { "rustfmt" },
 				svelte = { "prettier" },
+				tex = { "latexindent" },
 				typescript = { "prettier" },
 				typescriptreact = { "prettier" },
 				yaml = { "prettier" },
@@ -37,6 +38,12 @@ return {
 					prepend_args = function()
 						return { "--tab-width", "4" }
 					end,
+				},
+				latexindent = {
+					-- install latexindent from package manager
+					-- texlive-binextra perl-yaml-tiny perl-file-homedir
+					command = "latexindent",
+					args = { "-m" },
 				},
 			},
 			format_after_save = {

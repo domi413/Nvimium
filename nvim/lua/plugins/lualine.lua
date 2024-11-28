@@ -30,10 +30,12 @@ return {
 				lualine_c = {
 					function()
 						local width = vim.fn.winwidth(0)
-						local filename = vim.fn.expand("%:t")
-						local location = vim.fn.line(".")
+						local filenamestr = vim.fn.expand("%:t")
+						local filename = (filenamestr ~= "" and #filenamestr) or 9
+						local location = #tostring(vim.fn.line("."))
+						local modified = vim.bo.modified and 4 or 0
 
-						return string.rep("-", width - (#filename + #tostring(location) + 11))
+						return string.rep("-", width - (filename + location + modified + 11))
 					end,
 				},
 				lualine_x = { "location" },
