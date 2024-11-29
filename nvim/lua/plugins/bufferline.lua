@@ -1,6 +1,7 @@
 return {
 	"akinsho/bufferline.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
+	-- dependencies = { "nvim-tree/nvim-web-devicons" },
+	dependencies = { "DaikyXendo/nvim-material-icon" },
 	config = function()
 		-- Function to detect amount of tabs
 		function close_tab_if_multiple()

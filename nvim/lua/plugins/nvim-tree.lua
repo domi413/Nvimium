@@ -1,6 +1,7 @@
 return {
 	"nvim-tree/nvim-tree.lua",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
+	-- dependencies = { "nvim-tree/nvim-web-devicons" },
+	dependencies = { "DaikyXendo/nvim-material-icon" },
 	config = function()
 		-- change color for arrows in tree to light blue
 		vim.cmd([[ highlight NvimTreeFolderArrowClosed guifg=#3FC5FF ]])

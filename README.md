@@ -12,6 +12,8 @@ nvim configs
     - [ ] Increase performance by better lazy loading
     - [ ] Enhance config quality and leave some unnecessary plugins out
 - [ ] First column lua/go/...
+- [ ] Save selected theme as default
+- [ ] html/css completion
 
 #### Plugin issues
 
